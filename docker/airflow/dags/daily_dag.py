@@ -15,6 +15,32 @@ import glob
 # DAG directory path
 dag_path = os.getcwd()
 
+#Function takes in a dataframe and return a transformed dataframe
+def process_files(df):
+
+    #delete any rows that dont have a name
+    new_df = df[df.name.notnull()]
+
+    #remove title from name
+    title_front = ["Dr.","Mrs.","Ms.","Mr."]
+    title_back = ["Jr."]
+    new_df['name'] = new_df['name'].apply(lambda x : " ".join(str(x).split(" ")[1:]) if any(y in x for y in title_front) else x)
+    new_df['name'] = new_df['name'].apply(lambda x : " ".join(str(x).split(" ")[:-1]) if any(y in x for y in title_back) else x)
+
+    #remove any zeros prepended to the price field
+    new_df['price'] = pd.to_numeric(new_df['price'])
+    
+    #split name 
+    new_df[['first_name','last_name']] = new_df['name'].str.split(" ", n = 1, expand = True)
+    
+    #create a new field(columns) above_100 (boolean) when price is true
+    new_df['above_100'] = (new_df['price'] > 100.00) 
+    
+    #rearrange columns
+    new_df = new_df[['name', 'first_name', 'last_name', 'price', 'above_100']]
+    
+    return new_df
+
 
 # Define arguments for the DAG
 default_args = {
