@@ -40,12 +40,11 @@ def process_files(df):
 
 def transform_data():
     #change the raw_path according to your own raw folder path
-    # raw_path = 'C:\\Users\\User\\OneDrive\\Desktop\\dsaid-de-tech-assessment\\docker\\airflow\\raw_data'
-    raw_path = r'C:\Users\User\OneDrive\Desktop\dsaid-de-tech-assessment\Section 1\docker\airflow\raw_data'
-
-    #change the raw_path according to your own processed folder path    
-    # processed_path = 'C:\\Users\\User\\OneDrive\\Desktop\\dsaid-de-tech-assessment\\docker\\airflow\\processed_data'
-    processed_path = r'C:\Users\User\OneDrive\Desktop\dsaid-de-tech-assessment\Section 1\docker\airflow\processed_data'
+    # get dag directory path
+    dag_path = os.getcwd() 
+    raw_path = f"{dag_path}/raw_data"
+    processed_path = f"{dag_path}/processed_data"
+    # processed_path = r'C:\Users\User\OneDrive\Desktop\dsaid-de-tech-assessment\Section 1\docker\airflow\processed_data'
 
     # use glob to get all the csv files in the raw folder
     csv_files = glob.glob(os.path.join(raw_path, "*.csv"))
