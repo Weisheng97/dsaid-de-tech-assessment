@@ -1,0 +1,34 @@
+I run Airflow 2.0 via Docker.
+
+Getting started (If you do not have airflow and docker)
+If you do not have Docker Desktop, first step is to download docker desktop. 
+There is a docker-compose.yaml file in the folder. 
+
+Run the following commands to start the instance of Airflow in Docker.
+
+docker-compose up airflow-init
+docker-compose up
+
+Once the Apache Airflow instance is ready, we can go to localhost:8080, login with user “airflow” and password “airflow” and start coding.
+
+Inside my daily_dag.py file, I have only 1 task (transform_data) and I use python operator to call and run my transform function.
+
+The transform function which will go through all the csv file in the raw folder, 
+read it and process it by calling process_files function that I define inside the script. 
+
+Process_files function will first remove rows that do not have a name, 
+remove title such as Dr, Mrs, Ms etc from name before split the name to first name and last name. 
+
+After spliting the names into first and last name, 2 columns will be created to store the first and last name.
+
+Prices will also be convert to numeric type to remove any zeros prepended to the price field. 
+
+In addition, a boolean column ("above_100") is created and has value True when price is above $100 vice versa.
+
+Lastly, I will rearrange the columns in this order ['name', 'first_name', 'last_name', 'price', 'above_100'] before return the new processed dataframe.
+
+Once the dataframe has been processed, it will be converted to csv and saved into the processed dataset. The raw dataset will 
+be removed from the raw folder.
+
+*Currently the functions that I have written works. However, when I execute my dag on Airflow, the dag is successfully executed without
+running my python operator. I am still trying to debug this.
